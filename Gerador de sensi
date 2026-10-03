@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SENSI BOLINHA GRÁTIS</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif}
+    :root{
+      --fundo:#0a0a0c;--card:#141419;--card2:#1c1c24;--borda:#2a2a34;
+      --texto:#e5e5e7;--texto2:#9898a3;--destaque:#c9a227;--suave:#24242d;
+    }
+    body{background:var(--fundo);color:var(--texto);min-height:100vh;padding:20px}
+    .container{max-width:440px;margin:0 auto}
+    .topo{text-align:center;margin-bottom:30px}
+    .topo h1{font-size:26px;font-weight:800;color:var(--texto)}
+    .topo span{color:var(--destaque)}
+    .topo p{color:var(--texto2);font-size:13px;margin-top:4px}
+    .card{background:var(--card);border:1px solid var(--borda);border-radius:14px;padding:22px;margin-bottom:16px}
+    label{display:block;margin:16px 0 8px;font-size:13px;font-weight:600;color:var(--texto2);text-transform:uppercase;letter-spacing:1px}
+    .linha-botoes{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .botao-plat{padding:12px;border:1px solid var(--borda);border-radius:10px;background:var(--card2);color:var(--texto2);font-size:14px;font-weight:600;cursor:pointer;transition:.2s}
+    .botao-plat.ativo{border-color:var(--destaque);color:var(--destaque);background:var(--suave)}
+    .marcas{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}
+    .marcas::-webkit-scrollbar{display:none}
+    .marca{flex-shrink:0;padding:10px 14px;border:1px solid var(--borda);border-radius:20px;background:var(--card2);color:var(--texto2);font-size:13px;font-weight:600;cursor:pointer;transition:.2s}
+    .marca.ativo{border-color:var(--destaque);color:var(--destaque);background:var(--suave)}
+    select{width:100%;padding:14px;border:1px solid var(--borda);border-radius:10px;background:var(--card2);color:var(--texto);font-size:14px;cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%298988a3' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center}
+    .niveis{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:4px}
+    .nivel{padding:12px;border:1px solid var(--borda);border-radius:10px;background:var(--card2);color:var(--texto2);font-size:13px;font-weight:600;cursor:pointer;transition:.2s}
+    .nivel.ativo{border-color:var(--destaque);color:var(--destaque);background:var(--suave)}
+    .gerar{width:100%;margin-top:20px;padding:16px;border:none;border-radius:10px;background:var(--destaque);color:#000;font-size:15px;font-weight:700;cursor:pointer;transition:.2s}
+    .gerar:hover{opacity:.9}
+    .resultado{margin-top:24px;display:none}
+    .resultado.mostrar{display:block;animation:aparece .3s ease}
+    @keyframes aparece{from{opacity:0;transform:translateY(8px)}}
+    .subtitulo{font-size:14px;color:var(--destaque);font-weight:700;margin-bottom:14px}
+    .grade{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .item{background:var(--card2);border:1px solid var(--borda);border-radius:10px;padding:14px}
+    .item .nome{font-size:11px;color:var(--texto2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+    .item .valor{font-size:20px;font-weight:800;color:var(--texto)}
+    .dpi-titulo{font-size:13px;color:var(--texto2);margin:18px 0 10px;text-transform:uppercase;letter-spacing:1px}
+    .dpi-grade{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+    .dpi{background:var(--card2);border:1px solid var(--borda);border-radius:10px;padding:12px 8px;text-align:center}
+    .dpi .nome{font-size:10px;color:var(--texto2);margin-bottom:4px}
+    .dpi .valor{font-size:18px;font-weight:700;color:var(--texto)}
+    .dpi.destaque{border-color:var(--destaque);background:var(--suave)}
+    .aviso{margin-top:18px;padding:14px;background:rgba(201,162,39,.08);border:1px solid rgba(201,162,39,.2);border-radius:10px;font-size:13px;line-height:1.6;color:#d4b86a}
+    .botoes-acao{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
+    .acao{padding:13px;border:none;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;transition:.2s}
+    .acao.copiar{background:var(--suave);color:var(--texto)}
+    .acao.nova{background:var(--card2);color:var(--texto2);border:1px solid var(--borda)}
+    .rodape{text-align:center;margin-top:30px;font-size:11px;color:var(--texto2)}
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="topo">
+    <h1>SENSI <span>BOLINHA</span> GRÁTIS</h1>
+    <p>+700 Modelos · Atualizado</p>
+  </div>
+
+  <div class="card">
+    <label>Plataforma</label>
+    <div class="linha-botoes">
+      <button class="botao-plat ativo" data-plat="android">Android</button>
+      <button class="botao-plat" data-plat="iphone">iPhone</button>
+    </div>
+
+    <label>Marca</label>
+    <div class="marcas" id="listaMarcas"></div>
+
+    <label>Modelo</label>
+    <select id="modelo"></select>
+
+    <label>Nível de Sensi</label>
+    <div class="niveis">
+      <button class="nivel" data-nivel="baixa">Baixa</button>
+      <button class="nivel ativo" data-nivel="media">Média</button>
+      <button class="nivel" data-nivel="alta">Alta</button>
+    </div>
+
+    <button class="gerar" id="btnGerar">GERAR MINHA SENSI</button>
+
+    <div class="resultado" id="resultado">
+      <div class="subtitulo">✅ CONFIGURAÇÃO PRONTA</div>
+      <div class="grade">
+        <div class="item"><div class="nome">Geral</div><div class="valor" id="vGeral"></div></div>
+        <div class="item"><div class="nome">Ponto Vermelho</div><div class="valor" id="vPonto"></div></div>
+        <div class="item"><div class="nome">Mira 2x</div><div class="valor" id="v2x"></div></div>
+        <div class="item"><div class="nome">Mira 4x</div><div class="valor" id="v4x"></div></div>
+        <div class="item"><div class="nome">Sniper AWM</div><div class="valor" id="vSniper"></div></div>
+        <div class="item"><div class="nome">Olho Livre</div><div class="valor" id="vOlho"></div></div>
+      </div>
+      <div class="dpi-titulo">DPI Recomendado</div>
+      <div class="dpi-grade">
+        <div class="dpi"><div class="nome">Seguro</div><div class="valor" id="dpiSeguro"></div></div>
+        <div class="dpi destaque"><div class="nome">Recomendado</div><div class="valor" id="dpiMelhor"></div></div>
+        <div class="dpi"><div class="nome">Extremo</div><div class="valor" id="dpiExtremo"></div></div>
+      </div>
+      <div class="aviso">
+        💡 Dica:<br>
+        SE ESTIVER DANDO MUITO PEITO AUMENTE 2 OU MAIS NA SENSI GERAL. SE ESTIVER PASSANDO MUITO DA CABEÇA DIMINUA 1 POR 1 ATÉ FICAR CERTO!
+      </div>
+      <div class="botoes-acao">
+        <button class="acao copiar" id="btnCopiar">📋 COPIAR TUDO</button>
+        <button class="acao nova" id="btnNova">🔄 OUTRA</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="rodape">SENSI BOLINHA GRÁTIS — ajuste do seu jeito</div>
+</div>
+
+<script>
+const dados = {
+  android: {
+    Samsung: {
+      modelos: [
+        'Galaxy A06','Galaxy A05','Galaxy A05s','Galaxy A04','Galaxy A04e','Galaxy A03','Galaxy A03 Core','Galaxy A02','Galaxy A15','Galaxy A14','Galaxy A13','Galaxy A12','Galaxy A11','Galaxy A25','Galaxy A24','Galaxy A23','Galaxy A22','Galaxy A21s','Galaxy A35','Galaxy A34','Galaxy A33','Galaxy A32','Galaxy A31','Galaxy A55','Galaxy A54','Galaxy A53','Galaxy A52','Galaxy A52s','Galaxy A51','Galaxy A73','Galaxy A72','Galaxy A71',
+        'Galaxy S24','Galaxy S24+','Galaxy S24 Ultra','Galaxy S23','Galaxy S23+','Galaxy S23 Ultra','Galaxy S22','Galaxy S22+','Galaxy S22 Ultra','Galaxy S21','Galaxy S21+','Galaxy S21 Ultra','Galaxy S21 FE','Galaxy S20 FE','Galaxy Note 20','Galaxy Note 20 Ultra','Galaxy Note 10+','Galaxy Z Flip 5','Galaxy Z Flip 4','Galaxy Z Fold 5','Galaxy Z Fold 4',
+        'Galaxy M12','Galaxy M14','Galaxy M23','Galaxy M33','Galaxy M34','Galaxy M52','Galaxy M53','Galaxy M54','Galaxy J2 Core','Galaxy J4+','Galaxy J6+','Galaxy J7 Prime','Galaxy J8','Outro Samsung'
+      ],
+      baseDpi: 411, baseGeral: 168
+    },
+    Xiaomi: {
+      modelos: [
+        'Mi 9','Mi 10','Mi 10T','Mi 11','Mi 11 Lite','Mi 11T','Mi 12','Mi 12 Lite','Mi 12T','Mi 13','Mi 13 Lite','Mi 14','Mi 14T','Mi 13T','Mi 13T Pro','Outro Xiaomi'
+      ],
+      baseDpi: 440, baseGeral: 160
+    },
+    Redmi: {
+      modelos: [
+        'Redmi 9','Redmi 9A','Redmi 9C','Redmi 9T','Redmi 10','Redmi 10A','Redmi 10C','Redmi 12','Redmi 12C','Redmi 13','Redmi 13C','Redmi A1','Redmi A2',
+        'Redmi Note 8','Redmi Note 9','Redmi Note 9 Pro','Redmi Note 10','Redmi Note 10 Pro','Redmi Note 10S','Redmi Note 11','Redmi Note 11 Pro','Redmi Note 11S','Redmi Note 12','Redmi Note 12 Pro','Redmi Note 12S','Redmi Note 13','Redmi Note 13 Pro','Redmi Note 13 Pro+','Outro Redmi'
+      ],
+      baseDpi: 440, baseGeral: 162
+    },
+    Poco: {
+      modelos: [
+        'Poco C3','Poco C31','Poco C40','Poco C50','Poco C51','Poco C65','Poco M3','Poco M4 Pro','Poco M5','Poco M5s','Poco M6 Pro',
+        'Poco X3','Poco X3 NFC','Poco X3 Pro','Poco X4 Pro','Poco X5','Poco X5 Pro','Poco X6','Poco X6 Pro',
+        'Poco F3','Poco F4','Poco F4 GT','Poco F5','Poco F5 Pro','Poco F6','Poco F6 Pro','Outro Poco'
+      ],
+      baseDpi: 440, baseGeral: 160
+    },
+    Motorola: {
+      modelos: [
+        'Moto E6','Moto E7','Moto E7 Plus','Moto E20','Moto E22','Moto E22i','Moto E30','Moto E40',
+        'Moto G8','Moto G8 Power','Moto G9','Moto G9 Play','Moto G9 Plus','Moto G10','Moto G20','Moto G22','Moto G23','Moto G30','Moto G31','Moto G32','Moto G34','Moto G41','Moto G42','Moto G50','Moto G51','Moto G52','Moto G53','Moto G54','Moto G60','Moto G71','Moto G72','Moto G73','Moto G82','Moto G84',
+        'Moto Edge 20','Moto Edge 30','Moto Edge 30 Fusion','Moto Edge 40','Moto Edge 40 Neo','Moto Edge 50','Moto Edge 50 Pro','Moto Edge 50 Ultra','Outro Motorola'
+      ],
+      baseDpi: 392, baseGeral: 170
+    },
+    Realme: {
+      modelos: [
+        'C11','C11 2021','C12','C15','C20','C21','C21Y','C25','C25s','C25Y','C30','C30s','C31','C33','C35','C51','C53','C55','C67',
+        'Narzo 20','Narzo 30A','Narzo 50','Narzo 50A','Narzo 50i Prime',
+        'Realme 5','Realme 5i','Realme 6','Realme 6i','Realme 7','Realme 7i','Realme 8','Realme 8i','Realme 8 Pro','Realme 9','Realme 9i','Realme 9 Pro','Realme 9 Pro+','Realme 10','Realme 10 Pro','Realme 10 Pro+','Realme 11','Realme 11 Pro','Realme 11 Pro+','Realme 12','Realme 12+','Realme 12 Pro',
+        'GT Master Edition','GT Neo 2','GT Neo 3','GT Neo 5','GT 5','Outro Realme'
+      ],
+      baseDpi: 480, baseGeral: 158
+    },
+    Oppo: {
+      modelos: [
+        'A5s','A9','A12','A15','A15s','A16','A16K','A17','A17K','A31','A32','A33','A52','A53','A54','A55','A57','A58','A72','A74','A76','A77','A77s','A78','A92','A94','A95','A96','A98',
+        'Reno 2','Reno 3','Reno 4','Reno 5','Reno 6','Reno 7','Reno 7Z','Reno 8','Reno 8T','Reno 9','Reno 10','Reno 10 Pro','Reno 11','Reno 11 Pro','Reno 12',
+        'Find X3','Find X5','Find X6','Find X7','K10','K11','K12','Outro Oppo'
+      ],
+      baseDpi: 480, baseGeral: 156
+    },
+    Vivo: {
+      modelos: [
+        'Y11','Y12','Y12s','Y15','Y15s','Y17','Y20','Y20s','Y21','Y21s','Y21t','Y22','Y30','Y31','Y33s','Y35','Y36','Y50','Y51','Y51A','Y52','Y55','Y56','Y72','Y75','Y76','Y77','Y78','Y100',
+        'V15','V17','V19','V20','V21','V23','V23e','V25','V25e','V27','V29','V29e','V30','V40','X50','X60','X70','X80','X90','X100',
+        'iQOO 7','iQOO 9','iQOO 10','iQOO 11','iQOO 12','Neo 5','Neo 6','Neo 7','Neo 8','Neo 9','Z5','Z6','Z7','Z8','Z9','Outro Vivo'
+      ],
+      baseDpi: 480, baseGeral: 158
+    },
+    Huawei: {
+      modelos: [
+        'Y5p','Y6p','Y7a','Y7p','Y8p','Y9a','Y9s','P30','P30 Lite','P30 Pro','P40','P40 Lite','P40 Pro','P50','P50 Pro','P60','Mate 20','Mate 30','Mate 40','Mate 50','Mate 60',
+        'Nova 3','Nova 3i','Nova 5','Nova 5T','Nova 7','Nova 7i','Nova 8','Nova 9','Nova 10','Nova 11','Nova 12','Outro Huawei'
+      ],
+      baseDpi: 428, baseGeral: 162
+    },
+    Honor: {
+      modelos: [
+        '8X','9X','9 Lite','10','10 Lite','20','20 Lite','20 Pro','30','30S','50','50 Lite','60','70','80','90','100','200','Magic 4','Magic 5','Magic 6',
+        'X6','X7','X8','X8a','X9','X9a','X10','X6a','X7a','X8b','X9b','Outro Honor'
+      ],
+      baseDpi: 428, baseGeral: 160
+    },
+    Infinix: {
+      modelos: [
+        'Smart 5','Smart 6','Smart 7','Smart 8','Hot 9','Hot 9 Play','Hot 10','Hot 10i','Hot 10 Play','Hot 11','Hot 11 Play','Hot 12','Hot 12i','Hot 12 Play','Hot 20','Hot 20i','Hot 20 Play','Hot 30','Hot 30i','Hot 30 Play','Hot 40','Hot 40i',
+        'Note 10','Note 10 Pro','Note 11','Note 12','Note 12 Pro','Note 30','Note 30 Pro','Note 40','Note 40 Pro','Zero 5G','Zero 8','Zero 20','Zero 30','GT 10 Pro','Outro Infinix'
+      ],
+      baseDpi: 420, baseGeral: 165
+    },
+    Tecno: {
+      modelos: [
+        'Pop 5','Pop 5 LTE','Pop 6','Pop 6 Go','Pop 7','Spark 5','Spark 5 Pro','Spark 6','Spark 6 Go','Spark 7','Spark 7 Pro','Spark 7T','Spark 8','Spark 8C','Spark 9','Spark 9 Pro','Spark 10','Spark 10C','Spark 20','Spark 20C','Spark Go','Spark Go 2023',
+        'Camon 12','Camon 15','Camon 16','Camon 17','Camon 18','Camon 18P','Camon 19','Camon 19 Pro','Camon 20','Camon 20 Pro',
+        'Pova','Pova 2','Pova 3','Pova 4','Pova 5','Pova Neo','Pova Neo 2','Pova 6','Outro Tecno'
+      ],
+      baseDpi: 420, baseGeral: 165
+    },
+    OnePlus: {
+      modelos: [
+        'Nord','Nord 2','Nord 2T','Nord CE','Nord CE 2','Nord CE 2 Lite','Nord CE 3','Nord CE 3 Lite','Nord CE 4','Nord N10','Nord N20','Nord N20 SE','Nord N30',
+        '7','7T','7 Pro','8','8T','9','9R','9RT','10R','10T','11','11R','12','12R','13','Outro OnePlus'
+      ],
+      baseDpi: 411, baseGeral: 158
+    },
+    Asus: {
+      modelos: [
+        'Zenfone 8','Zenfone 9','Zenfone 10','Zenfone 11','ROG Phone 2','ROG Phone 3','ROG Phone 5','ROG Phone 5s','ROG Phone 6','ROG Phone 6D','ROG Phone 7','ROG Phone 8','Outro Asus'
+      ],
+      baseDpi: 411, baseGeral: 155
+    },
+    Nokia: {
+      modelos: [
+        'C01 Plus','C02','C1','C2','C21','C21 Plus','C22','C30','C31','C32','C12','2.4','3.4','5.3','5.4','6.2','7.2','G10','G11','G20','G21','G22','G42','G62','X10','X20','X30','XR20','XR21','Outro Nokia'
+      ],
+      baseDpi: 400, baseGeral: 168
+    },
+    LG: {
+      modelos: [
+        'K10','K11+','K22','K40','K41S','K42','K50','K51S','K52','K61','K62','Q60','Q70','G7 ThinQ','G8','V40','V50','V60','Velvet','Wing','Stylo 6','Outro LG'
+      ],
+      baseDpi: 420, baseGeral: 165
+    },
+    Sony: {
+      modelos: [
+        'Xperia L3','Xperia L4','Xperia 1','Xperia 1 II','Xperia 1 III','Xperia 1 IV','Xperia 1 V','Xperia 5','Xperia 5 II','Xperia 5 III','Xperia 5 IV','Xperia 5 V','Xperia 10','Xperia 10 II','Xperia 10 III','Xperia 10 IV','Xperia 10 V','Xperia XZ2','Xperia XZ3','Outro Sony'
+      ],
+      baseDpi: 420, baseGeral: 160
+    },
+    Multilaser: {
+      modelos: [
+        'G','G Max','G Pro','G Plus','G Ultra','P9091','P910','P912','P913','P915','P916','P918','P920','P921','P923','P925','P930','P932','P935','P940','P950','P951','P952','P955','P960','P961','P962','P963','P965','P970','P971','P972','P975','P980','P981','P982','P985','P990','P991','P992','P995','Outro Multilaser'
+      ],
+      baseDpi: 320, baseGeral: 175
+    },
+    Positivo: {
+      modelos: [
+        'Twist','Twist Mini','Twist Plus','Twist 2','Twist 3','Vision','Vision 2','P28','P30','P35','P40','P50','P55','P60','P65','P70','P75','P80','P85','P90','Outro Positivo'
+      ],
+      baseDpi: 320, baseGeral: 175
+    },
+    'Outro Android': {
+      modelos: ['Modelo não listado'],
+      baseDpi: 400, baseGeral: 165
+    }
+  },
+  iphone: {
+    iPhone: {
+      modelos: [
+        'iPhone 7','iPhone 7 Plus','iPhone 8','iPhone 8 Plus','iPhone SE 2020','iPhone SE 2022','iPhone X','iPhone XR','iPhone XS','iPhone XS Max',
+        'iPhone 11','iPhone 11 Pro','iPhone 11 Pro Max','iPhone 12 mini','iPhone 12','iPhone 12 Pro','iPhone 12 Pro Max',
+        'iPhone 13 mini','iPhone 13','iPhone 13 Pro','iPhone 13 Pro Max',
+        'iPhone 14','iPhone 14 Plus','iPhone 14 Pro','iPhone 14 Pro Max',
+        'iPhone 15','iPhone 15 Plus','iPhone 15 Pro','iPhone 15 Pro Max',
+        'iPhone 16','iPhone 16 Plus','iPhone 16 Pro','iPhone 16 Pro Max','Outro iPhone'
+      ],
+      baseDpi: 460, baseGeral: 155
+    }
+  }
+}
+
+let platAtivo = 'android', marcaAtiva = 'Samsung', nivelAtivo = 'media'
+const listaMarcas = document.getElementById('listaMarcas'), selModelo = document.getElementById('modelo')
+function aleatorio(min,max){return Math.floor(Math.random()*(max-min+1))+min}
+function atualizarMarcas(){
+  listaMarcas.innerHTML=''
+  Object.keys(dados[platAtivo]).forEach(marca=>{
+    const b=document.createElement('button')
+    b.className='marca'+(marca===marcaAtiva?' ativo':'')
+    b.textContent=marca
+    b.onclick=()=>{marcaAtiva=marca;atualizarMarcas();atualizarModelos()}
+    listaMarcas.appendChild(b)
+  })
+}
+function atualizarModelos(){
+  selModelo.innerHTML=''
+  dados[platAtivo][marcaAtiva].modelos.forEach(mod=>{
+    const o=document.createElement('option');o.value=mod;o.textContent=mod;selModelo.appendChild(o)
+  })
+}
+document.querySelectorAll('.botao-plat').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('.botao-plat').forEach(x=>x.classList.remove('ativo'))
+  b.classList.add('ativo');platAtivo=b.dataset.plat
+  marcaAtiva=Object.keys(dados[platAtivo])[0];atualizarMarcas();atualizarModelos()
+})
+document.querySelectorAll('.nivel').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('.nivel').forEach(x=>x.classList.remove('ativo'))
+  b.classList.add('ativo');nivelAtivo=b.dataset.nivel
+})
+document.getElementById('btnGerar').onclick=()=>{
+  const d=dados[platAtivo][marcaAtiva]
+  const ajuste={baixa:{s:-18,d:-50},media:{s:0,d:0},alta:{s:26,d:90}}[nivelAtivo]
+  const geral=Math.min(200,Math.max(80,d.baseGeral+ajuste.s+aleatorio(-3,3)))
+  const ponto=Math.min(200,Math.max(80,geral+aleatorio(3,8)))
+  const x2=Math.min(200,Math.max(80,geral-aleatorio(3,8)))
+  const x4=Math.min(200,Math.max(60,geral-aleatorio(12,20)))
+  const sniper=Math.min(200,Math.max(30,geral-aleatorio(24,34)))
+  const olho=Math.min(200,Math.max(80,geral+aleatorio(6,12)))
+  const dpiBase=d.baseDpi+ajuste.d
+  document.getElementById('vGeral').textContent=geral
+  document.getElementById('vPonto').textContent=ponto
+  document.getElementById('v2x').textContent=x2
+  document.getElementById('v4x').textContent=x4
+  document.getElementById('vSniper').textContent=sniper
+  document.getElementById('vOlho').textContent=olho
+  document.getElementById('dpiSeguro').textContent=dpiBase-60
+  document.getElementById('dpiMelhor').textContent=dpiBase+aleatorio(-10,20)
+  document.getElementById('dpiExtremo').textContent=dpiBase+90
+  document.getElementById('resultado').classList.add('mostrar')
+}
+document.getElementById('btnNova').onclick=()=>document.getElementById('resultado').classList.remove('mostrar')
+document.getElementById('btnCopiar').onclick=async()=>{
+  const t=`🔥 SENSI BOLINHA GRÁTIS 🔥
+
+📱 ${marcaAtiva} — ${selModelo.value}
+🎯 Nível: ${nivelAtivo.toUpperCase()}
+
+Geral: ${document.getElementById('vGeral').textContent}
+Ponto Vermelho: ${document.getElementById('vPonto').textContent}
+Mira 2x: ${document.getElementById('v2x').textContent}
+Mira 4x: ${document.getElementById('v4x').textContent}
+Sniper AWM: ${document.getElementById('vSniper').textContent}
+Olho Livre: ${document.getElementById('vOlho').textContent}
+
+📐 DPI:
+Seguro: ${document.getElementById('dpiSeguro').textContent}
+Recomendado: ${document.getElementById('dpiMelhor').textContent}
+Extremo: ${document.getElementById('dpiExtremo').textContent}
+
+💡 Dica: SE ESTIVER DANDO MUITO PEITO AUMENTE 2 OU MAIS NA SENSI GERAL. SE ESTIVER PASSANDO MUITO DA CABEÇA DIMINUA 1 POR 1 ATÉ FICAR CERTO!`
+  await navigator.clipboard.writeText(t);alert('✅ Copiado!')
+}
+atualizarMarcas();atualizarModelos()
+</script>
+</body>
+</html>
